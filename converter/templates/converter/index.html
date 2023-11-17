@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DynamoDB to JSON Converter</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="container mx-auto">
+        <h1 class="text-xl font-bold mb-4">DynamoDB to JSON Converter</h1>
+        <div class="mb-4">
+            <textarea id="inputJson" class="w-full h-64 p-2 border border-gray-300"></textarea>
+            <div class="flex space-x-2 mt-2">
+                <button id="convertButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Convert
+                </button>
+                <button id="clearButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    Clear
+                </button>
+            </div>
+        </div>
+        <div class="mt-4">
+            <h2 class="text-lg font-bold">Converted JSON:</h2>
+            <pre id="outputJson" class="bg-gray-200 p-2 h-64 overflow-auto mt-2"></pre>
+            <div class="flex space-x-2 mt-2">
+                <button id="copyButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    Copy to Clipboard
+                </button>
+                <button id="compressButton" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+                    Compress JSON
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // JavaScript code for Convert, Copy to Clipboard, Compress JSON, and Clear functionalities
+
+        document.getElementById('convertButton').addEventListener('click', function() {
+            const inputJson = document.getElementById('inputJson').value;
+            axios.post('/convert/', inputJson, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(function (response) {
+                document.getElementById('outputJson').textContent = JSON.stringify(response.data, null, 2);
+            })
+            .catch(function (error) {
+                console.error('Error:', error);
+                alert('An error occurred while converting.');
+            });
+        });
+
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const outputJson = document.getElementById('outputJson').textContent;
+            navigator.clipboard.writeText(outputJson).then(function() {
+                alert('JSON copied to clipboard!');
+            }, function(err) {
+                console.error('Could not copy text: ', err);
+                alert('Failed to copy JSON.');
+            });
+        });
+
+        document.getElementById('compressButton').addEventListener('click', function() {
+            try {
+                const outputJson = document.getElementById('outputJson').textContent;
+                const compressed = JSON.stringify(JSON.parse(outputJson));
+                document.getElementById('outputJson').textContent = compressed;
+            } catch (err) {
+                console.error('Error compressing JSON: ', err);
+                alert('Error compressing JSON.');
+            }
+        });
+
+        document.getElementById('clearButton').addEventListener('click', function() {
+            document.getElementById('inputJson').value = '';
+            document.getElementById('outputJson').textContent = '';
+        });
+    </script>
+</body>
+</html>
