@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DynamoDB to JSON Converter</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    {% load static %}
 </head>
 <body class="bg-gray-100 p-8">
     <div class="container mx-auto">
@@ -32,6 +33,24 @@
                 </button>
             </div>
         </div>
+
+        <!-- About the Developer Section -->
+        <div class="mt-8">
+            <!-- <h2 class="text-lg text-center font-bold">About the Developer</h2> -->
+            <div class="text-center text-lg text-center font-bold p-4">
+                <p class="text-sm text-gray-600">
+                    This tool is developed by 
+                    <span class="font-bold text-black">Kunal Joshi</span>
+                    using 
+                    <span class="font-semibold">HTML</span>, 
+                    <span class="text-blue-500 font-semibold">Tailwind CSS</span>, 
+                    and 
+                    <span class="text-green-500 font-semibold">Django</span> framework.
+                  </p>
+                  
+            </div>
+            
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -46,17 +65,15 @@
             .then(function (response) {
                 document.getElementById('outputJson').textContent = JSON.stringify(response.data, null, 2);
             })
-            
-.catch(function (error) {
-    if (error.response) {
-        document.getElementById('outputJson').textContent = `Error: ${error.response.data}`;
-    } else if (error.request) {
-        document.getElementById('outputJson').textContent = 'No response received from the server.';
-    } else {
-        document.getElementById('outputJson').textContent = `An error occurred: ${error.message}`;
-    }
-});
-
+            .catch(function (error) {
+                if (error.response) {
+                    document.getElementById('outputJson').textContent = `Error: ${error.response.data}`;
+                } else if (error.request) {
+                    document.getElementById('outputJson').textContent = 'No response received from the server.';
+                } else {
+                    document.getElementById('outputJson').textContent = `An error occurred: ${error.message}`;
+                }
+            });
         });
 
         document.getElementById('copyButton').addEventListener('click', function() {

@@ -69,12 +69,10 @@ def is_valid_dynamodb_json(dynamodb_json):
     def validate_list_of_put_requests(list_of_put_requests):
         return all('PutRequest' in entry and validate_put_request(entry['PutRequest']) for entry in list_of_put_requests)
 
-    # Checking if it's a simple structure without 'PutRequest'
     if isinstance(dynamodb_json, dict):
         # It might be a simple key-value pair structure
         if all(isinstance(value, dict) for value in dynamodb_json.values()):
             return validate_map(dynamodb_json)
-        # It might be a more complex structure with 'PutRequest'
         else:
             for key, value in dynamodb_json.items():
                 if isinstance(value, list):
